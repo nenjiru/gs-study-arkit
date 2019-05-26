@@ -44,8 +44,7 @@ public class PlaneTracker : MonoBehaviour
      */
     public void SpawnContent(HitTestResult result)
     {
-        // 手動で追加していた GroundPlaneStage と同等のAR上の床面「アンカー」を生成する
-        GameObject anchor = tracker.CreatePlaneAnchor(Guid.NewGuid().ToString(), result);
+        Anchor anchor = tracker.CreatePlaneAnchor(Guid.NewGuid().ToString(), result);
 
         // 床面情報が取得できなかったら関数を終了させる
         if (result == null || anchor == null)
@@ -55,11 +54,9 @@ public class PlaneTracker : MonoBehaviour
 
         // このオブジェクトのインスペクタにアタッチしたプレファブのインスタンスを生成する
         GameObject content = Instantiate(contentPrefab);
-        // インスタンスの親をアンカーにする
-        content.transform.parent = anchor.transform;
         // インスタンスの座標と回転をリセットする
-        content.transform.localPosition = Vector3.zero;
-        content.transform.localRotation = Quaternion.identity;
+        content.transform.position = result.Position;
+        content.transform.rotation = result.Rotation;
         // インスタンスをアクティブにする
         content.SetActive(true);
 
